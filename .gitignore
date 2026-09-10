@@ -22,5 +22,5 @@ data/input/
 outputs/dashboard/*
 !outputs/dashboard/.gitkeep
 
-# Power BI exports are documented with screenshots rather than generated files
+# Power BI workspace and local project artifacts are not source code
 *.pbix

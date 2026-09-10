@@ -46,8 +46,9 @@ partially overwrite the last valid workbook.
 
 - **Overview:** headline KPIs plus product, country, period sales, and
   new-versus-repeat customer visuals.
-- **Data Quality:** row-class coverage, missing values, non-positive values, and
-  monetary reconciliation context.
+- **Data Quality:** curated and classified row counts, missing-value indicators,
+  and a monitoring note explaining the reconciliation treatment of
+  cancellations and adjustments.
 
 The current version imports the six tables independently. It does not claim a
 shared star schema or automatic cross-table filtering.

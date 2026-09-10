@@ -58,7 +58,9 @@ The overview page presents the headline KPIs and comparison visuals for sales, o
 
 ### Data Quality
 
-The data-quality page keeps operational context visible: total curated rows, row-class coverage, missing descriptions, missing customer identifiers, non-positive values, and the reconciliation between sale, cancellation, adjustment, and net values.
+The data-quality page shows total curated rows, the three-way row classification, and missing-description and missing-customer-ID counts. Its monitoring note explains why cancellation and adjustment rows are retained for reconciliation instead of being silently discarded.
+
+The saved report structure and its verified values are recorded in [dashboard/README.md](dashboard/README.md).
 
 The report is intentionally based on small prepared tables instead of importing every transaction line into Power BI. Version 1 uses a reproducible manual refresh: regenerate the workbook, replace or upload it, and refresh the semantic model. It does not claim automatic refresh from S3.
 
@@ -71,7 +73,7 @@ tests/                  Unit, integration, and workbook tests
 docs/                   Contracts and implementation guides
 data/sample/            Placeholder for non-sensitive sample inputs
 outputs/dashboard/      Generated workbook location; contents are ignored
-dashboard/screenshots/  Optional portfolio screenshots
+dashboard/              Saved-report structure and verified visual inventory
 ```
 
 Generated workbooks, downloaded data, credentials, and Power BI project files are excluded from Git.
