@@ -58,9 +58,31 @@ before analysis, preventing a later batch from silently changing a KPI."
 
 ## Block 3 — Create the SQL analytics layer
 
-Write small DuckDB SQL files for overall KPIs, monthly trends, product
-performance, geographic markets, and customer behaviour. Test every important
-metric against a tiny hand-checkable fixture.
+**Purpose:** Keep business rules in readable, version-controlled SQL instead
+of hiding them inside Python or dashboard visuals.
+
+**Input:** The validated `curated_transactions` view from Block 2.
+
+**Output:** Two reusable model views and six report results: overall KPIs,
+monthly trends, product performance, country performance, customer behaviour,
+and data-quality reconciliation.
+
+**Code structure:** `analytics_transactions` adds dates and the three-way row
+classification. `customer_orders` reduces sale lines to one row per customer
+order and labels the first order as new. The six report queries aggregate only
+from these documented models. Python only coordinates the SQL files and
+returns their column names and rows.
+
+**Verification:** Five analytics tests use nine hand-checkable rows across two
+months. They verify exact KPI values, row classification, monthly
+reconciliation, new/repeat customer logic, and the presence of all six report
+tables. The full ten-test suite passes. A real-batch integration run analysed
+40,020 curated rows and produced 3,001 product groups and 24 country groups.
+
+**Interview explanation:** "I separated modelling from reporting. Shared SQL
+views define row and customer-order logic once, while small report queries
+reuse those definitions. I tested the KPIs against manually calculated data
+before running them on a real batch."
 
 ## Block 4 — Export dashboard-ready tables
 

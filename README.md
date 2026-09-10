@@ -10,15 +10,16 @@ application.
 
 ## Current status
 
-Blocks 1 and 2 are complete: the repository foundation is defined and the
-Parquet loader is implemented. The loader accepts local or S3 data, validates
-every file against the upstream schema, and exposes one DuckDB view named
-`curated_transactions`.
+Blocks 1 through 3 are complete: the repository foundation, validated Parquet
+loader, and SQL analytics layer are implemented. The loader accepts local or
+S3 data and exposes one DuckDB view named `curated_transactions`. Versioned SQL
+then classifies each row, builds customer-order history, and produces six
+purpose-specific report tables.
 
-The loader passed its focused test suite and an integration check against
-40,020 real curated rows produced by the upstream pipeline's first source
-batch. SQL models, dashboard export, and the Power BI report will be added and
-tested in later blocks.
+Ten automated tests pass. They include hand-calculated metric tests and an
+integration check against 40,020 real curated rows produced by the upstream
+pipeline's first source batch. The dashboard export and Power BI report will
+be added and tested in later blocks.
 
 ## Planned workflow
 
@@ -87,6 +88,23 @@ PYTHONPATH=src .venv/bin/python -m retail_analytics.loader \
 
 Successful output reports the number of Parquet files, total rows, and the ten
 validated columns. No business metrics are calculated at this stage.
+
+## Run the analytics layer
+
+Run all six report queries against a local Parquet file or directory:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m retail_analytics.analytics \
+  /path/to/curated
+```
+
+You can pass an `s3://bucket/prefix` URI instead. The command prints the row
+count for each report and the overall KPI summary. It does not write an output
+file yet.
+
+The SQL is intentionally split into two reusable model views and six report
+queries. See [`docs/sql-guide.md`](docs/sql-guide.md) for the role of each
+file and the reasoning behind the design.
 
 ## Learning approach
 
