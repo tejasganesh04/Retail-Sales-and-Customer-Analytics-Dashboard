@@ -11,12 +11,11 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from retail_analytics.loader import (
-    DataSourceError,
     EXPECTED_ARROW_SCHEMA,
+    DataSourceError,
     SchemaMismatchError,
     load_curated_dataset,
 )
-
 
 VALID_ROWS = [
     {
@@ -114,9 +113,11 @@ class LoaderTests(unittest.TestCase):
             self.assertEqual(row_count, 2)
 
     def test_rejects_an_empty_local_directory(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            with self.assertRaisesRegex(DataSourceError, "No Parquet files"):
-                load_curated_dataset(directory)
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            self.assertRaisesRegex(DataSourceError, "No Parquet files"),
+        ):
+            load_curated_dataset(directory)
 
     def test_rejects_a_schema_change(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

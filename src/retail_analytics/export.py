@@ -16,6 +16,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
 from .analytics import QueryResult, run_all_reports
+from .audit import audit_reports
 from .loader import load_curated_dataset
 
 DEFAULT_OUTPUT: Final[Path] = Path("outputs/dashboard/retail_analytics.xlsx")
@@ -195,6 +196,7 @@ def export_dashboard_workbook(
     with load_curated_dataset(source, s3_client=s3_client) as dataset:
         reports = run_all_reports(dataset.connection)
 
+    audit_reports(reports)
     destination = Path(output_path).expanduser().resolve()
     _write_workbook(reports, destination)
     return {report_name: len(result.rows) for report_name, result in reports.items()}

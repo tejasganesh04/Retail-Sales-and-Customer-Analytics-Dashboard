@@ -8,7 +8,11 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from openpyxl import load_workbook
 
-from retail_analytics.export import REPORT_SHEETS, TABLE_NAMES, export_dashboard_workbook
+from retail_analytics.export import (
+    REPORT_SHEETS,
+    TABLE_NAMES,
+    export_dashboard_workbook,
+)
 from retail_analytics.loader import EXPECTED_ARROW_SCHEMA
 from tests.test_analytics import TEST_ROWS
 

@@ -101,9 +101,11 @@ file, reopens it to detect structural problems, and only then replaces the
 destination workbook.
 
 **Verification:** Two exporter tests check all sheet/table names, typed KPI
-values, formats, frozen headers, and successful reopening. A real workbook was
-generated from 40,020 curated rows and visually inspected across all six
-sheets. The complete twelve-test suite passes.
+values, formats, frozen headers, and successful reopening. Two additional audit
+tests verify eleven cross-report reconciliation rules and prove that a
+disagreement blocks publication. A real workbook was generated from 40,020
+curated rows and visually inspected across all six sheets. The complete
+fourteen-test suite passes.
 
 **Interview explanation:** "I kept Excel as a generated delivery format, not
 another calculation layer. Every refresh reruns the reviewed SQL and atomically
@@ -111,11 +113,39 @@ replaces six named tables that Power BI can import directly."
 
 ## Block 5 — Build the Power BI report
 
-Upload the workbook in Power BI's browser application and create a small number
-of focused report pages. Verify every visual against the SQL output.
+**Purpose:** Turn the reviewed reporting tables into a small, explainable
+business report without redefining metrics in the visual layer.
+
+**Input:** The six named tables in `retail_analytics.xlsx`.
+
+**Output:** A saved two-page Power BI report: an Overview page for sales,
+orders, products, countries, and customer activity, plus a Data Quality page
+for row coverage and reconciliation context.
+
+**Design boundary:** Each visual uses the purpose-specific table that already
+contains its required grain. Version 1 deliberately avoids claiming a star
+schema or automatic S3 refresh. Labels distinguish gross sales, net recorded
+value, and cancellation documents instead of collapsing them into an ambiguous
+"revenue" measure.
+
+**Verification:** Headline cards and visual totals were compared with the
+generated workbook. The current report covers 40,020 curated rows from 1–18
+December 2009 and displays the completed-order count without abbreviated units.
+
+**Interview explanation:** "I kept business definitions in tested SQL and used
+Power BI as the interactive presentation layer. The report has a performance
+view and a data-quality view, so users can interpret KPIs alongside the health
+of the underlying data."
 
 ## Block 6 — Final quality and portfolio review
 
-Run the complete test suite, document reproducible commands, capture dashboard
-screenshots, validate the public link if available, and compare each resume
-claim with evidence in the repository.
+**Purpose:** Make every repository and resume claim traceable to repeatable
+evidence.
+
+**Verification:** Run all fourteen tests, regenerate and reopen the workbook,
+confirm the eleven reconciliation rules, inspect ignored files and credentials,
+and compare the README metrics with the exported KPI and quality tables.
+
+**Portfolio boundary:** Dashboard screenshots may be added for presentation,
+but generated workbooks, downloaded source data, credentials, and Power BI
+project files remain outside Git.

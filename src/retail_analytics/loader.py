@@ -10,10 +10,9 @@ from __future__ import annotations
 import argparse
 import json
 from dataclasses import dataclass
-from decimal import Decimal
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any, Final
+from typing import Any, Final, Self
 from urllib.parse import urlparse
 
 import duckdb
@@ -64,7 +63,7 @@ class LoadedDataset:
             self._temporary_directory.cleanup()
             self._temporary_directory = None
 
-    def __enter__(self) -> LoadedDataset:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *_: object) -> None:

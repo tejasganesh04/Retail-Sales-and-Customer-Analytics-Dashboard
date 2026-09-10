@@ -63,13 +63,15 @@ for every original order.
 ## 5. Customer classification
 
 Customer analysis excludes null `customer_id` values. A customer's first
-chronological completed order is classified as **new**. Later completed orders
-are classified as **repeat**. All lines belonging to the same invoice receive
-the same classification.
+chronological completed order observed within the loaded dataset is classified
+as **new**. Later completed orders are classified as **repeat**. All lines
+belonging to the same invoice receive the same classification. This is a
+dataset-relative cohort label; it does not claim to know whether the customer
+purchased before the available history began.
 
-## 6. Planned dashboard tables
+## 6. Implemented dashboard tables
 
-The Excel export will contain small, purpose-specific tables rather than trying
+The Excel export contains small, purpose-specific tables rather than trying
 to place more than one million transaction lines into a worksheet:
 
 - `kpi_summary`
@@ -79,8 +81,12 @@ to place more than one million transaction lines into a worksheet:
 - `customer_monthly`
 - `data_quality_summary`
 
-Each table will be generated from version-controlled SQL. The Power BI report
-will visualise these results; it will not contain undocumented business rules.
+Each table is generated from version-controlled SQL. The Power BI report
+visualises these results; it does not introduce undocumented business rules.
+
+Before workbook generation, eleven reconciliation rules compare totals across
+the KPI, monthly, product, country, customer, and data-quality grains. Any
+disagreement raises an error and prevents publication.
 
 ## 7. Refresh promise
 
@@ -92,3 +98,10 @@ Version 1 provides a reproducible manual refresh:
 
 Automatic S3-to-Power-BI refresh is outside version 1 and must not be claimed
 until it is implemented and tested.
+
+## 8. Dashboard model boundary
+
+The six exported tables have different grains and are intentionally imported as
+separate reporting tables. Version 1 does not claim a shared dimensional model
+or cross-table global filtering. Each visual is bound to the report table that
+already contains the grain and metric it needs.
