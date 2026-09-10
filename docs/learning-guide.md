@@ -86,8 +86,28 @@ before running them on a real batch."
 
 ## Block 4 — Export dashboard-ready tables
 
-Use Python to run the reviewed SQL and write a documented Excel workbook. The
-workbook is generated output, not a second source of truth.
+**Purpose:** Create a small, stable handoff that Power BI can import without
+embedding calculations in the workbook.
+
+**Input:** The six tested report results from Block 3.
+
+**Output:** `outputs/dashboard/retail_analytics.xlsx`, with one worksheet and
+one named Excel table for each report.
+
+**Code structure:** Pandas converts each typed query result into a labelled
+table. OpenPyXL writes those tables, applies explicit date and numeric formats,
+freezes the headers, and hides gridlines. The exporter first writes a temporary
+file, reopens it to detect structural problems, and only then replaces the
+destination workbook.
+
+**Verification:** Two exporter tests check all sheet/table names, typed KPI
+values, formats, frozen headers, and successful reopening. A real workbook was
+generated from 40,020 curated rows and visually inspected across all six
+sheets. The complete twelve-test suite passes.
+
+**Interview explanation:** "I kept Excel as a generated delivery format, not
+another calculation layer. Every refresh reruns the reviewed SQL and atomically
+replaces six named tables that Power BI can import directly."
 
 ## Block 5 — Build the Power BI report
 

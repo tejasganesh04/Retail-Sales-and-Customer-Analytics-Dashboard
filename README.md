@@ -10,16 +10,17 @@ application.
 
 ## Current status
 
-Blocks 1 through 3 are complete: the repository foundation, validated Parquet
-loader, and SQL analytics layer are implemented. The loader accepts local or
-S3 data and exposes one DuckDB view named `curated_transactions`. Versioned SQL
-then classifies each row, builds customer-order history, and produces six
-purpose-specific report tables.
+Blocks 1 through 4 are complete: the repository foundation, validated Parquet
+loader, SQL analytics layer, and Power BI-ready Excel export are implemented.
+The loader accepts local or S3 data and exposes one DuckDB view named
+`curated_transactions`. Versioned SQL then classifies each row, builds
+customer-order history, and produces six purpose-specific report tables.
 
-Ten automated tests pass. They include hand-calculated metric tests and an
+Twelve automated tests pass. They include hand-calculated metric tests and an
 integration check against 40,020 real curated rows produced by the upstream
-pipeline's first source batch. The dashboard export and Power BI report will
-be added and tested in later blocks.
+pipeline's first source batch. The real-data workbook was reopened, inspected,
+and rendered sheet by sheet. Building and verifying the Power BI report is the
+remaining dashboard block.
 
 ## Planned workflow
 
@@ -105,6 +106,29 @@ file yet.
 The SQL is intentionally split into two reusable model views and six report
 queries. See [`docs/sql-guide.md`](docs/sql-guide.md) for the role of each
 file and the reasoning behind the design.
+
+## Export the Power BI workbook
+
+Generate the six-table Excel workbook from a local curated directory:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m retail_analytics.export \
+  /path/to/curated
+```
+
+The default output is `outputs/dashboard/retail_analytics.xlsx`. To select a
+different location:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m retail_analytics.export \
+  s3://your-bucket/curated/ \
+  --output /path/to/retail_analytics.xlsx
+```
+
+The workbook is regenerated from the SQL results each time. It contains one
+named Excel table per report, so Power BI can import only the prepared results
+instead of more than one million transaction lines. See
+[`docs/workbook-guide.md`](docs/workbook-guide.md) for the exact table names.
 
 ## Learning approach
 
