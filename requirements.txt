@@ -3,4 +3,3 @@ duckdb
 openpyxl
 pandas
 pyarrow
-pytest

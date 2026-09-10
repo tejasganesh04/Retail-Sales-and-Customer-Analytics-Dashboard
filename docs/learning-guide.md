@@ -34,8 +34,27 @@ same KPI differently."
 
 ## Block 2 — Load and validate Parquet
 
-Build one loader supporting both a local path and an S3 URI. It will reject a
-dataset whose required columns are missing or incompatible.
+**Purpose:** Give every later SQL query one trusted input called
+`curated_transactions`, regardless of whether the Parquet files came from a
+local directory or S3.
+
+**Input:** A local Parquet file/directory or an `s3://bucket/prefix` URI.
+
+**Output:** An in-memory DuckDB connection containing the
+`curated_transactions` view.
+
+**Code structure:** The loader resolves files, downloads S3 objects when
+needed, validates every Arrow schema, creates the DuckDB view, and cleans up
+temporary downloads when closed. It performs no business calculations.
+
+**Verification:** Five focused tests cover local files, nested batches, empty
+sources, incompatible schemas, and simulated S3 downloads. An integration
+check transformed the upstream pipeline's real `batch_001.csv` and confirmed
+that all 40,020 curated rows loaded with the expected ten columns.
+
+**Interview explanation:** "I built a loader that presents multiple Parquet
+batches as one DuckDB view. It checks every file against the upstream schema
+before analysis, preventing a later batch from silently changing a KPI."
 
 ## Block 3 — Create the SQL analytics layer
 

@@ -10,9 +10,15 @@ application.
 
 ## Current status
 
-Block 1 is complete: the repository layout and analytics contract are defined.
-The data loader, SQL models, dashboard export, and Power BI report will be added
-and tested in separate, understandable blocks.
+Blocks 1 and 2 are complete: the repository foundation is defined and the
+Parquet loader is implemented. The loader accepts local or S3 data, validates
+every file against the upstream schema, and exposes one DuckDB view named
+`curated_transactions`.
+
+The loader passed its focused test suite and an integration check against
+40,020 real curated rows produced by the upstream pipeline's first source
+batch. SQL models, dashboard export, and the Power BI report will be added and
+tested in later blocks.
 
 ## Planned workflow
 
@@ -47,6 +53,40 @@ sql/                    Reviewed DuckDB queries
 src/retail_analytics/   Python package
 tests/                  Automated tests
 ```
+
+## Local setup
+
+Create an isolated Python environment and install the dependencies:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+```
+
+Run the complete test suite:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+## Inspect curated data
+
+Inspect a local Parquet file or a directory containing multiple batches:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m retail_analytics.loader /path/to/curated
+```
+
+The same command accepts an S3 prefix when standard AWS credentials are
+available:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m retail_analytics.loader \
+  s3://your-bucket/curated/
+```
+
+Successful output reports the number of Parquet files, total rows, and the ten
+validated columns. No business metrics are calculated at this stage.
 
 ## Learning approach
 
