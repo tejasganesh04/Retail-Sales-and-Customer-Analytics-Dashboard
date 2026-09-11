@@ -19,7 +19,7 @@ Curated Parquet in S3 or a local folder
    Six audited reporting tables
                   |
                   v
-       Power BI Excel workbook
+       Excel handoff workbook
                   |
                   v
       Interactive Power BI report
@@ -71,7 +71,6 @@ sql/                    Reviewed DuckDB models and report queries
 src/retail_analytics/   Loader, analytics runner, audit, and exporter
 tests/                  Unit, integration, and workbook tests
 docs/                   Contracts and implementation guides
-data/sample/            Placeholder for non-sensitive sample inputs
 outputs/dashboard/      Generated workbook location; contents are ignored
 dashboard/              Saved-report structure and verified visual inventory
 ```
@@ -148,4 +147,4 @@ Before publishing, the exporter verifies row counts and monetary totals across t
 - **Cancellation document rate** compares cancellation documents with completed and cancellation documents; it is not presented as a one-to-one order return rate.
 - **New customers** means a customer's first completed order observed within the loaded dataset, not necessarily their lifetime first purchase.
 
-All definitions and refresh guarantees are recorded in [docs/analytics-contract.md](docs/analytics-contract.md). The implementation sequence and interview explanations are in [docs/learning-guide.md](docs/learning-guide.md).
+All definitions and refresh guarantees are recorded in [docs/analytics-contract.md](docs/analytics-contract.md).
